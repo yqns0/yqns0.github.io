@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon CV | Yanis Clement</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.85); /* Un peu plus opaque pour la lisibilité */
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --text-main: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-blue: #007aff;
+            --accent-green: #34c759;
+            --sidebar-width: 260px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* --- SCROLLBAR STYLE MAC (Epuré) --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.2); }
+
+        /* --- BACKGROUND ANIMATION --- */
+        #network-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* --- FENÊTRE PRINCIPALE --- */
+        .mac-window {
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 14px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* --- HEADER --- */
+        .window-header {
+            height: 44px;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            background: rgba(255,255,255,0.5);
+            border-top-left-radius: 14px;
+            border-top-right-radius: 14px;
+            user-select: none;
+        }
+
+        .traffic-lights { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 2px rgba(0,0,0,0.1); }
+        .red { background: #ff5f57; border: 1px solid #e0443e; }
+        .yellow { background: #febc2e; border: 1px solid #dba522; }
+        .green { background: #28c840; border: 1px solid #1aab29; }
+
+        .window-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .connection-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--accent-green);
+            background: rgba(52, 199, 89, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- CORPS --- */
+        .window-body { display: flex; flex: 1; overflow: hidden; }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(245, 245, 247, 0.5);
+            border-right: 1px solid rgba(0,0,0,0.06);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-mini { text-align: center; margin-bottom: 35px; }
+        .avatar {
+            width: 85px;
+            height: 85px;
+            background: #e1e1e1;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            background-image: url('https://ui-avatars.com/api/?name=J+D&background=007aff&color=fff&size=128');
+            background-size: cover;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .name { font-weight: 700; font-size: 1.15em; margin-bottom: 4px; }
+        .role { font-size: 0.85em; color: var(--text-secondary); font-weight: 500; }
+
+        .nav-menu { list-style: none; padding: 0; margin: 0; }
+        .nav-item {
+            padding: 10px 14px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .nav-item:hover { background: rgba(0,0,0,0.04); color: var(--text-main); }
+        .nav-item.active {
+            background: white;
+            color: var(--accent-blue);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            font-weight: 600;
+        }
+
+        /* --- CONTENU --- */
+        .content-area {
+            flex: 1;
+            padding: 40px 50px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            background: rgba(255,255,255,0.4);
+        }
+
+        .section { display: none; animation: fadeIn 0.4s ease; max-width: 800px; margin: 0 auto; }
+        .section.active-section { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 2.2rem; margin-bottom: 10px; color: var(--text-main); letter-spacing: -0.5px; }
+        h2 { font-size: 1.1rem; margin-top: 35px; margin-bottom: 20px; border-bottom: 1px solid #eaeaea; padding-bottom: 8px; color: var(--text-main); }
+        p { line-height: 1.7; color: #555; font-size: 1rem; }
+
+        /* Badges Compétences */
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+        .badge {
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: transform 0.2s;
+        }
+        .badge:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.08); }
+        .badge i { color: var(--accent-blue); }
+
+        /* Timeline (Expérience & Formation) */
+        .timeline-item {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 35px;
+        }
+        /* Ligne verticale */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 6px;
+            bottom: -35px; /* Lie au suivant */
+            width: 2px;
+            background: #e5e5e5;
+        }
+        .timeline-item:last-child::after { display: none; }
+        
+        /* Point */
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            border: 3px solid white;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+        
+        .date { font-size: 0.85em; color: var(--text-secondary); margin-bottom: 4px; display: block; font-weight: 500; }
+        .job-title { font-weight: 700; font-size: 1.1em; color: var(--text-main); }
+        .company { font-weight: 500; color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95em; }
+
+        /* Footer Status */
+        .status-bar {
+            height: 28px;
+            background: rgba(255,255,255,0.6);
+            border-top: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 10px;
+            color: var(--text-secondary);
+            justify-content: space-between;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .stat-group { display: flex; gap: 20px; }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="network-bg"></canvas>
+
+    <div class="mac-window">
+        
+        <div class="window-header">
+            <div class="traffic-lights">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="window-title">
+                <i class="fas fa-terminal"></i>&nbsp; admin@portfolio: ~
+            </div>
+            <div class="connection-status">ONLINE</div>
+        </div>
+
+        <div class="window-body">
+            
+            <div class="sidebar">
+                <div class="profile-mini">
+                    <div class="avatar"></div>
+                    <div class="name">Yanis Clement</div>
+                    <div class="role">Technicien d'assistance informatique</div>
+                </div>
+
+                <ul class="nav-menu">
+                    <li class="nav-item active" onclick="showSection('about', this)">
+                        <i class="fas fa-user"></i> Profil
+                    </li>
+                    <li class="nav-item" onclick="showSection('education', this)">
+                        <i class="fas fa-graduation-cap"></i> Formation
+                    </li>
+                    <li class="nav-item" onclick="showSection('skills', this)">
+                        <i class="fas fa-server"></i> Stack Tech
+                    </li>
+                    <li class="nav-item" onclick="showSection('experience', this)">
+                        <i class="fas fa-briefcase"></i> Expérience
+                    </li>
+                    <li class="nav-item" onclick="showSection('projects', this)">
+                        <i class="fas fa-code-branch"></i> Projets
+                    </li>
+                </ul>
+            </div>
+
+            <div class="content-area">
+                
+                <div id="about" class="section active-section">
+                    <h1>/whoami</h1>
+                    <p>Bienvenue sur mon interface. Après avoir validé mes compétences fondamentales avec le titre TAI, je souhaite franchir une nouvelle étape technique.</p>
+                    <p>Rigoureux et autonome sur la maintenance de parc, je recherche une entreprise d'accueil pour un contrat d'apprentissage TSSR. Mon objectif : devenir un atout pour votre équipe systèmes et réseaux.</p>
+                    
+                    <h2>Contact Uplink</h2>
+                    <div class="skills-grid">
+                        <div class="badge"><i class="fas fa-envelope"></i> yanisclement92@gmail.com</div>
+                        <div class="badge"><i class="fab fa-linkedin"></i> linkedin.com/in/yanisclement</div>
+                        <div class="badge"><i class="fab fa-github"></i> github.com/yqns0</div>
+                    </div>
+                </div>
+
+                <div id="education" class="section">
+                    <h1>Formation</h1>
+                    
+                    <h2>Parcours Académique</h2>
+                    <div class="timeline-item">
+                        <span class="date">06/2025 - 11/2025</span>
+                        <div class="job-title">HSTA - Technicien d'assistance informatique</div>
+                        <div class="company">OFIAQ, Nîmes</div>
+                        <p>Diplômé avec les félicitations du jury.</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <span class="date">2018 - 2020</span>
+                        <div class="job-title">CAP - Pâtisserie</div>
+                        <div class="company">Ecole de Paris des métiers de la table, Paris</div>
+                        <p>Diplômé.</p>
+                    </div>
+
+
+                </div>
+
+                <div id="skills" class="section">
+                    <h1>Compétences</h1>
+                    
+                    <h2>Systèmes</h2>
+                    <div class="skills-grid">
+                        <div class="badge">Windows 10/11 (Maitrise)</div>
+                        <div class="badge">Windows Server (Intérmediaire)</div>
+                        <div class="badge">Linux debian (Intérmediaire)</div>
+                        <div class="badge">Proxmox (Avancé)</div>
+                    </div>
+
+                    <h2>Réseaux</h2>
+                    <div class="skills-grid">
+                        <div class="badge">TCP/IP, DNS, DHCP, NAT</div>
+                        <div class="badge">Brassage</div>
+                        <div class="badge">Configuration Box/Routeur</div>
+                        <div class="badge">Diagnostic de base</div>
+                        <div class="badge">Pare-feu</div>
+                    </div>
+
+                    <h2>Administration</h2>
+                    <div class="skills-grid">
+                        <div class="badge">Active Directory (Gestion utilisateurs et droits)</div>
+                        <div class="badge">Gestion des droits fichiers</div>
+                        <div class="badge">Déploiement</div>
+                        <div class="badge">GPO</div>
+                    </div>
+                </div>
+
+                <div id="experience" class="section">
+                    <h1>Historique</h1>
+                    
+                    <div class="timeline-item">
+                        <span class="date">05/2024 - 09/2024</span>
+                        <div class="job-title">Pâtissier</div>
+                        <div class="company">Boulangerie Marchetti</div>
+                        
+                    </div>
+
+                    <div class="timeline-item">
+                        <span class="date">10/2023 - 03/2024</span>
+                        <div class="job-title">Pâtissier</div>
+                        <div class="company">Anissa Patisserie, Nîmes</div>
+                        
+                    </div>
+
+                    <div class="timeline-item">
+                        <span class="date">2021 - 2023</span>
+                        <div class="job-title">Pâtissier</div>
+                        <div class="company">Marie Blachere, Nîmes</div>
+                        
+                    </div>
+                </div>
+
+                <div id="projects" class="section">
+                    <h1>Lab & Projets Perso</h1>
+                    
+                   <div style="background: white; padding: 25px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+    
+    <h3 style="margin-top:0;">
+        <a href="https://vtracker.fr" target="_blank" style="color:var(--accent-blue); text-decoration: none;">
+            <i class="fas fa-network-wired"></i> Vtracker
+        </a>
+    </h3>
+
+
+                        <p>Plateforme complète d'achat revente pour le site Vinted. (SaaS)</p>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div class="stat-group">
+                <span><i class="fas fa-circle" style="color: #34c759; font-size: 8px;"></i> System Normal</span>
+                <span><i class="fas fa-wifi"></i> 5 GHz</span>
+            </div>
+            <div class="stat-group">
+                <span id="latency">Ping: 12ms</span>
+                <span id="uptime">Uptime: 00:00:00</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- NAVIGATION ---
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active-section'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active-section');
+            element.classList.add('active');
+        }
+
+        // --- UPTIME COMPTEUR ---
+        let seconds = 0;
+        setInterval(() => {
+            seconds++;
+            const date = new Date(seconds * 1000);
+            const timeStr = date.toISOString().substr(11, 8);
+            document.getElementById('uptime').innerText = `Uptime: ${timeStr}`;
+            
+            // Random Ping update
+            if(seconds % 2 === 0) {
+                const lat = Math.floor(Math.random() * 15) + 5;
+                document.getElementById('latency').innerText = `Ping: ${lat}ms`;
+            }
+        }, 1000);
+
+        // --- PARTICLES BACKGROUND (Subtil) ---
+        const canvas = document.getElementById('network-bg');
+        const ctx = canvas.getContext('2d');
+        let w, h, particles = [];
+
+        function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if(this.x < 0 || this.x > w) this.vx *= -1;
+                if(this.y < 0 || this.y > h) this.vy *= -1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0,0,0,0.1)';
+                ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI*2); ctx.fill();
+            }
+        }
+
+        for(let i=0; i<45; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0,0,w,h);
+            particles.forEach((p, i) => {
+                p.update(); p.draw();
+                for(let j=i; j<particles.length; j++) {
+                    const dx = p.x - particles[j].x, dy = p.y - particles[j].y;
+                    const dist = Math.sqrt(dx*dx+dy*dy);
+                    if(dist < 120) {
+                        ctx.strokeStyle = `rgba(0,0,0,${0.05 - dist/120*0.05})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
