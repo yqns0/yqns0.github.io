@@ -11,7 +11,7 @@
         /* --- VARIABLES & RESET --- */
         :root {
             --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.85); /* Un peu plus opaque pour la lisibilité */
+            --glass-bg: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(255, 255, 255, 0.6);
             --text-main: #1d1d1f;
             --text-secondary: #86868b;
@@ -34,7 +34,7 @@
             overflow: hidden;
         }
 
-        /* --- SCROLLBAR STYLE MAC (Epuré) --- */
+        /* --- SCROLLBAR STYLE MAC --- */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 4px; }
@@ -196,25 +196,22 @@
         .badge:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.08); }
         .badge i { color: var(--accent-blue); }
 
-        /* Timeline (Expérience & Formation) */
+        /* Timeline */
         .timeline-item {
             position: relative;
             padding-left: 35px;
             margin-bottom: 35px;
         }
-        /* Ligne verticale */
         .timeline-item::after {
             content: '';
             position: absolute;
             left: 3px;
             top: 6px;
-            bottom: -35px; /* Lie au suivant */
+            bottom: -35px;
             width: 2px;
             background: #e5e5e5;
         }
         .timeline-item:last-child::after { display: none; }
-        
-        /* Point */
         .timeline-item::before {
             content: '';
             position: absolute;
@@ -250,6 +247,98 @@
         }
         .stat-group { display: flex; gap: 20px; }
 
+        /* --- MEDIA QUERIES (VERSION MOBILE OPTIMISÉE) --- */
+        @media screen and (max-width: 768px) {
+            
+            body {
+                align-items: flex-start;
+                overflow: auto;
+                height: auto;
+                padding: 10px;
+            }
+
+            .mac-window {
+                width: 100%;
+                height: auto;
+                min-height: 90vh;
+                margin-top: 0;
+                flex-direction: column;
+            }
+
+            .traffic-lights, #uptime { display: none; }
+            .window-title { justify-content: flex-start; }
+            .window-body { flex-direction: column; }
+
+            /* Header Mobile Compact */
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(0,0,0,0.06);
+                padding: 15px;
+                flex-shrink: 0;
+                background: rgba(255,255,255,0.6); 
+            }
+
+            /* Profil Horizontal */
+            .profile-mini {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                margin-bottom: 0;
+            }
+            .avatar { width: 50px; height: 50px; margin: 0; }
+            .profile-text { display: flex; flex-direction: column; text-align: left; }
+            .name { font-size: 1rem; margin-bottom: 0; }
+            .role { font-size: 0.8rem; }
+
+            /* BOUTON MENU MOBILE STYLE */
+            .mobile-menu-btn {
+                display: block; 
+                width: 100%;
+                padding: 10px;
+                margin-top: 15px;
+                background: white;
+                border: 1px solid rgba(0,0,0,0.1);
+                border-radius: 8px;
+                font-family: 'Inter', sans-serif;
+                color: var(--accent-blue);
+                font-weight: 600;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            /* MENU CACHÉ PAR DÉFAUT */
+            .nav-menu {
+                display: none; /* Caché par défaut */
+                flex-direction: column;
+                gap: 5px;
+                margin-top: 10px;
+                padding-bottom: 5px;
+                animation: slideDown 0.3s ease;
+            }
+
+            /* Classe pour afficher le menu via JS */
+            .nav-menu.show-mobile {
+                display: flex;
+            }
+
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .nav-item { margin-bottom: 0; padding: 12px; background: rgba(255,255,255,0.5); }
+            .content-area { padding: 20px 15px; }
+            .status-bar { font-size: 9px; }
+        }
+
+        /* Sur PC, on cache le bouton menu */
+        @media screen and (min-width: 769px) {
+            .mobile-menu-btn { display: none; }
+        }
+
     </style>
 </head>
 <body>
@@ -275,11 +364,17 @@
             <div class="sidebar">
                 <div class="profile-mini">
                     <div class="avatar"></div>
-                    <div class="name">Yanis Clement</div>
-                    <div class="role">Technicien d'assistance informatique</div>
+                    <div class="profile-text">
+                        <div class="name">Yanis Clement</div>
+                        <div class="role">Technicien d'assistance informatique</div>
+                    </div>
                 </div>
 
-                <ul class="nav-menu">
+                <button class="mobile-menu-btn" onclick="toggleMenu()">
+                    <span id="btn-text">Menu</span> <i class="fas fa-chevron-down" id="btn-icon"></i>
+                </button>
+
+                <ul class="nav-menu" id="nav-menu-list">
                     <li class="nav-item active" onclick="showSection('about', this)">
                         <i class="fas fa-user"></i> Profil
                     </li>
@@ -330,8 +425,6 @@
                         <div class="company">Ecole de Paris des métiers de la table, Paris</div>
                         <p>Diplômé.</p>
                     </div>
-
-
                 </div>
 
                 <div id="skills" class="section">
@@ -356,7 +449,7 @@
 
                     <h2>Administration</h2>
                     <div class="skills-grid">
-                        <div class="badge">Active Directory (Gestion utilisateurs et droits)</div>
+                        <div class="badge">Active Directory</div>
                         <div class="badge">Gestion des droits fichiers</div>
                         <div class="badge">Déploiement</div>
                         <div class="badge">GPO</div>
@@ -370,40 +463,32 @@
                         <span class="date">05/2024 - 09/2024</span>
                         <div class="job-title">Pâtissier</div>
                         <div class="company">Boulangerie Marchetti</div>
-                        
                     </div>
 
                     <div class="timeline-item">
                         <span class="date">10/2023 - 03/2024</span>
                         <div class="job-title">Pâtissier</div>
                         <div class="company">Anissa Patisserie, Nîmes</div>
-                        
                     </div>
 
                     <div class="timeline-item">
                         <span class="date">2021 - 2023</span>
                         <div class="job-title">Pâtissier</div>
                         <div class="company">Marie Blachere, Nîmes</div>
-                        
                     </div>
                 </div>
 
                 <div id="projects" class="section">
                     <h1>Lab & Projets Perso</h1>
                     
-                   <div style="background: white; padding: 25px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
-    
-    <h3 style="margin-top:0;">
-        <a href="https://vtracker.fr" target="_blank" style="color:var(--accent-blue); text-decoration: none;">
-            <i class="fas fa-network-wired"></i> Vtracker
-        </a>
-    </h3>
-
-
+                    <div style="background: white; padding: 25px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                        <h3 style="margin-top:0;">
+                            <a href="https://vtracker.fr" target="_blank" style="color:var(--accent-blue); text-decoration: none;">
+                                <i class="fas fa-network-wired"></i> Vtracker
+                            </a>
+                        </h3>
                         <p>Plateforme complète d'achat revente pour le site Vinted. (SaaS)</p>
                     </div>
-
-
                 </div>
 
             </div>
@@ -424,11 +509,37 @@
     <script>
         // --- NAVIGATION ---
         function showSection(sectionId, element) {
+            // 1. Cacher toutes les sections
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active-section'));
+            // 2. Désactiver tous les menus
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             
+            // 3. Activer la cible
             document.getElementById(sectionId).classList.add('active-section');
             element.classList.add('active');
+
+            // 4. Si on est sur mobile, on referme le menu après le clic
+            if (window.innerWidth <= 768) {
+                toggleMenu(); // Cela va replier le menu
+            }
+        }
+
+        // --- GESTION DU MENU MOBILE ---
+        function toggleMenu() {
+            const menu = document.getElementById('nav-menu-list');
+            const icon = document.getElementById('btn-icon');
+            
+            // On bascule la classe qui affiche/cache
+            menu.classList.toggle('show-mobile');
+
+            // On change l'icône (Flèche haut / bas)
+            if (menu.classList.contains('show-mobile')) {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
         }
 
         // --- UPTIME COMPTEUR ---
